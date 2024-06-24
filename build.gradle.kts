@@ -63,3 +63,25 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+val generated = file("src/main/generated")
+tasks.withType<JavaCompile> {
+	options.generatedSourceOutputDirectory.set(generated)
+}
+
+sourceSets {
+	main {
+		kotlin.srcDirs += generated
+	}
+}
+
+tasks.named("clean") {
+	doLast {
+		generated.deleteRecursively()
+	}
+}
+
+
+kapt {
+	generateStubs = true
+}
